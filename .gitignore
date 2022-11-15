@@ -22,6 +22,9 @@ server/.env.development
 .env.development.local
 .env.production.local
 .env.test.local
+*.log
+*.gz
+tmp/*
 
 npm-debug.log*
 yarn-debug.log*
