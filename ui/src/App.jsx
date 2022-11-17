@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
+import { useStoreState } from 'easy-peasy';
+import { Routes, Route } from 'react-router-dom';
 
-const App = () => {
+import { Error } from './components/general/Error/Error';
+import MarketingRequestForm
+  from "./pages/MarketingRequestForm/MarketingRequestForm";
+import WelcomePage from "./pages/WelcomePage/WelcomePage";
+
+const App = ({ history }) => {
+  const isError = useStoreState((store) => store.error.isError);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Routes>
+        <Route index path="/" element={<WelcomePage history={history} />} />
+        <Route path="marketing-request-form" element={<MarketingRequestForm />} />
+      </Routes>
+      {isError && <Error isError={isError} />}
+    </>
   );
 };
 
