@@ -1,9 +1,10 @@
 import makeStyles from '@mui/styles/makeStyles';
 
-const styles = (theme) => ({
-  title: {
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
+const styles = () => ({
+  widget: {
+    '& iframe': {
+      borderRadius: '0 !important',
+    }
   },
 });
 
