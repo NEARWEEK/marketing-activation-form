@@ -4,7 +4,6 @@ import { Box, Button } from "@mui/material";
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { useNavigate } from 'react-router';
 
-import Header from "../../components/Header/Header";
 import { routes } from "../../config/routes";
 import Logo from '../../images/logo.png';
 
@@ -29,7 +28,6 @@ const WelcomePage = () => {
 
   return (
     <>
-      <Header />
       <Box sx={{ flex: 1, width: '100%', height: '100%', backgroundColor: '#fff' }}>
         <Box className={classes.welcomeBox}>
           <Box className={classes.welcomeLogo}>
