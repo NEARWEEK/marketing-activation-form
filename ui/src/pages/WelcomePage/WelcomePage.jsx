@@ -19,7 +19,7 @@ const WelcomePage = () => {
   const classes = useStyles();
 
   const handleWelcomeButton = () => {
-    if (wallet.isSignedIn()) {
+    if (wallet?.isSignedIn()) {
       navigate(marketingRequestForm);
     } else {
       onConnectWallet();
@@ -59,7 +59,7 @@ const WelcomePage = () => {
                   disableElevation
                 >
                   <Box style={{ fontWeight: [700] }}>
-                    {wallet.isSignedIn() ? 'Apply Today' : 'Connect wallet'}
+                    {wallet?.isSignedIn() ? 'Apply Today' : 'Connect wallet'}
                   </Box>
                 </Button>
               </Box>

@@ -9,6 +9,7 @@
     "@mui/material": "^5.10.14",
     "@mui/styles": "^5.10.14",
     "@typeform/embed-react": "^2.3.0",
+    "axios": "^0.27.2",
     "buffer": "^6.0.3",
     "easy-peasy": "^5.0.4",
     "history": "^5.2.0",

@@ -9,9 +9,11 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import { Initializer } from './providers/Initializer/Initializer';
+import { setupResponseInterceptor } from "./services/apiService";
 import { store } from './store';
 
 const history = createBrowserHistory();
+setupResponseInterceptor(history);
 
 const theme = createTheme({
   breakpoints: {
