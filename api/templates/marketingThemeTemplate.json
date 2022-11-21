@@ -1,0 +1,10 @@
+{
+  "name": "ENTER_A_VALUE_HERE",
+  "font": "Source Sans Pro",
+  "colors": {
+    "question": "#000000",
+    "answer": "#005FFF",
+    "button": "#005FFF",
+    "background": "#FFFFFF"
+  }
+}

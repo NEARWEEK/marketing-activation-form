@@ -2,16 +2,19 @@ require('dotenv').config();
 
 const createError = require('http-errors');
 const express = require('express');
-const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
 const setUpNear = require('./utilities/setUpNear');
+const { setupTypeform } = require("./services/typeformService");
 const verifyNearSignatureHeader = require('./middlewares/verifyNearSignatureHeader');
 const logger = require('./utilities/logger');
 const config = require('./config/app');
 const near = require('./middlewares/near');
+
+// Routes
+const marketingRequestFormRoutes = require('./modules/MarketingRequestForm/MarketingRequestFormRoutes');
 
 // Options
 const corsOptions = {
@@ -33,14 +36,19 @@ const setup = async () => {
   // Set up NEAR
   const nearApi = await setUpNear();
 
+  // Set up Typeform
+  await setupTypeform();
+
   // Set up middlewares
   app.use(morgan('dev'));
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
-  app.use(cookieParser());
   app.use(near(nearApi));
   app.use(cors(corsOptions));
   app.use(verifyNearSignatureHeader);
+
+  // Set up routes
+  app.use('/api/typeform', marketingRequestFormRoutes);
 
   // Set up error catching
   app.use((req, res, next) => {

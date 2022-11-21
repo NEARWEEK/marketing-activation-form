@@ -9,7 +9,7 @@ const getTypeFormId = async (signature) => {
     return null;
   }
 
-  const response = await axios.get(`${API_HOST}/api/form-id`, {
+  const response = await axios.get(`${API_HOST}/api/typeform/form-id`, {
     headers: {
       'X-NEAR-ACCOUNT-ID': signature.accountId,
       'X-NEAR-SIGNATURE': JSON.stringify(signature.signature),

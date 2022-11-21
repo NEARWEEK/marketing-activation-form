@@ -1,0 +1,220 @@
+{
+  "type": "quiz",
+  "title": "ENTER_A_VALUE_HERE",
+  "theme": {
+    "href": "ENTER_A_VALUE_HERE"
+  },
+  "workspace": {
+    "href": "ENTER_A_VALUE_HERE"
+  },
+  "settings": {
+    "language": "en",
+    "progress_bar": "proportion",
+    "meta": {
+      "allow_indexing": false
+    },
+    "hide_navigation": false,
+    "is_public": true,
+    "is_trial": false,
+    "show_progress_bar": true,
+    "show_typeform_branding": true,
+    "are_uploads_public": false,
+    "show_time_to_complete": true,
+    "show_number_of_submissions": false,
+    "show_cookie_consent": true,
+    "show_question_number": true,
+    "pro_subdomain_enabled": false,
+    "capabilities": {
+      "e2e_encryption": {
+        "enabled": false,
+        "modifiable": false
+      }
+    }
+  },
+  "fields": [
+    {
+      "title": "What is the name of the project that you're requesting marketing support for?",
+      "ref": "01GHV742M1D39N46K2612X24A1",
+      "properties": {},
+      "validations": {
+        "required": false
+      },
+      "type": "long_text"
+    },
+    {
+      "title": "What is the best way to contact you?\nEmail? Telegram? Twitter?",
+      "ref": "9742942c-da62-4d4e-ba20-6e61aa5f2a50",
+      "properties": {
+        "description": "email@address.com or @username below"
+      },
+      "validations": {
+        "required": false
+      },
+      "type": "long_text"
+    },
+    {
+      "title": "Who is your main point of contact at NEAR?",
+      "ref": "6432c9f1-668e-4f12-94d4-2c42dcdb82b4",
+      "properties": {
+        "description": "Who provided you with this form? Please submit the name below."
+      },
+      "validations": {
+        "required": false
+      },
+      "type": "long_text"
+    },
+    {
+      "title": "What category does your project belong to?",
+      "ref": "b3c67ade-9fe6-41fa-9f24-58d7f40a38f7",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "ref": "1c2c30d9-b0d9-493f-ae74-fd807315c698",
+            "label": "NFT"
+          },
+          {
+            "ref": "0b2166f1-9f61-4cf4-8942-cf1f8d969d1f",
+            "label": "Gaming"
+          },
+          {
+            "ref": "9b65eb25-627e-43cb-875d-82d122640cec",
+            "label": "DeFi"
+          },
+          {
+            "ref": "fa2c5e8f-50ca-408d-b9b6-61def69790cc",
+            "label": "Payments"
+          },
+          {
+            "ref": "f996f8fd-7b4c-43cc-ab26-33891352a5df",
+            "label": "Oracle"
+          },
+          {
+            "ref": "c711a09e-6bea-4f05-bb3c-f6a49b90960b",
+            "label": "Bridge"
+          }
+        ]
+      },
+      "validations": {
+        "required": false
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "title": "Explain in 5 sentences what your project does, how it works and/or what problem it solves",
+      "ref": "837ecf04-8a6e-4de7-b98f-e2365ecc1f16",
+      "properties": {},
+      "validations": {
+        "required": false
+      },
+      "type": "long_text"
+    },
+    {
+      "title": "Does your project have its own token or is it planning to launch one?",
+      "ref": "e6a24b31-5cfe-4fc3-93b7-4a0dadcea977",
+      "properties": {},
+      "validations": {
+        "required": false
+      },
+      "type": "yes_no"
+    },
+    {
+      "title": "Are there any specific milestones that you're seeking marketing support for?",
+      "ref": "2f84bc13-902f-4ee2-8bf8-b2ad1f6b02d8",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "ref": "a4080a94-5937-48a3-95b9-56c709623f5c",
+            "label": "Product Launch"
+          },
+          {
+            "ref": "9d2587d1-b93c-4821-bfff-6ef0677e5220",
+            "label": "Event"
+          },
+          {
+            "ref": "4d2d51ee-fae0-4bc8-adc4-329e0ec265bb",
+            "label": "Partnership"
+          },
+          {
+            "ref": "ab6797e6-059e-45de-b65d-cf713ea4e120",
+            "label": "Fundraising"
+          },
+          {
+            "ref": "baf26f33-80e0-440f-afee-6d5a07cfd82c",
+            "label": "News"
+          }
+        ]
+      },
+      "validations": {
+        "required": false
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "title": "What type of support are you looking for?",
+      "ref": "8efc92d0-5f02-4664-8736-d1ba9f5c296e",
+      "properties": {
+        "randomize": false,
+        "allow_multiple_selection": true,
+        "allow_other_choice": true,
+        "vertical_alignment": true,
+        "choices": [
+          {
+            "ref": "b5ccf1db-7328-4d80-ba1a-f4a588a05285",
+            "label": "Blog Post"
+          },
+          {
+            "ref": "f0be8f6d-ba81-45bd-94cd-e7ff02339f73",
+            "label": "AMA"
+          },
+          {
+            "ref": "749d03b6-6b8d-4a91-91e4-0a020f778dde",
+            "label": "Include in a newsletter"
+          },
+          {
+            "ref": "dafdda76-650b-41c6-8bb1-bea7f095b44a",
+            "label": "Social Media post"
+          },
+          {
+            "ref": "dc421cf1-fa97-415c-bbf3-3f10f12d6b9a",
+            "label": "Giveaway"
+          },
+          {
+            "ref": "927877bb-2207-4523-943d-9c890ce983a1",
+            "label": "Video"
+          },
+          {
+            "ref": "e100a858-8d4f-466a-a90e-e9d2297db32e",
+            "label": "PR/Influencer"
+          },
+          {
+            "ref": "640d9767-c9f6-4b83-84ab-816ff180c4dd",
+            "label": "Visuals"
+          }
+        ]
+      },
+      "validations": {
+        "required": false
+      },
+      "type": "multiple_choice"
+    },
+    {
+      "title": "Please provide your feedback on the form, did you miss anything?",
+      "ref": "5bdbe45f-7a10-4d8d-b2d5-fc8b49e06d63",
+      "properties": {
+        "description": "Thank you!"
+      },
+      "validations": {
+        "required": false
+      },
+      "type": "long_text"
+    }
+  ]
+}
