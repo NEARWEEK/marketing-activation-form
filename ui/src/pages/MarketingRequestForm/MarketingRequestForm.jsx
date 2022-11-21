@@ -38,8 +38,12 @@ const MarketingRequestForm = () => {
     (async () => {
       try {
         const response = await sendingForm(id, event.response_id, sign);
-        setMarketingFromId(response.id);
-        navigate(createBountyProposal);
+        if (response) {
+          setMarketingFromId(response.id);
+          navigate(createBountyProposal);
+        } else {
+          navigate(errorPage);
+        }
       } catch (error) {
         console.log(error);
         navigate(errorPage);

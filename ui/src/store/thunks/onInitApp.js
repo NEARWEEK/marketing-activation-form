@@ -2,6 +2,7 @@ import { Buffer } from 'buffer';
 
 import { thunk } from 'easy-peasy';
 
+import { routes } from "../../config/routes";
 import { getNearApi } from "../helpers/getNearApi";
 import { isRedirectFromWallet } from '../helpers/isRedirectFromWallet';
 
@@ -11,7 +12,7 @@ import { onRedirectFromWallet } from './onRedirectFromWallet';
 export const onInitApp = thunk(async (actions, payload, helpers) => {
   global.Buffer = Buffer;
   const { history, setInit } = payload;
-  const { setNearApi, setError } = actions;
+  const { setNearApi } = actions;
   try {
     setNearApi(await getNearApi());
     const state = helpers.getStoreState();
@@ -26,9 +27,6 @@ export const onInitApp = thunk(async (actions, payload, helpers) => {
     setInit(true);
   } catch (error) {
     console.log(`Error onInit App: ${error}`);
-    setError({
-      isError: true,
-      description: 'Application is not loaded. Please try again letter.',
-    });
+    await history.replace(routes.errorPage);
   }
 });

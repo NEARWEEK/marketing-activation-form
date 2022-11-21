@@ -2,14 +2,6 @@ import qs from 'query-string';
 
 import { routes } from '../../config/routes';
 
-const onError = (actions, history) => {
-  actions.setError({
-    isError: true,
-    description: 'You have not connected your wallet!',
-  });
-  history.replace(routes.welcome);
-};
-
 export const onRedirectFromWallet = async (actions, history) => {
   try {
     const query = qs.parse(history.location.search);
@@ -21,7 +13,7 @@ export const onRedirectFromWallet = async (actions, history) => {
     }
   } catch (error) {
     console.log(`Error: ${error}`);
-    onError(actions, history);
+    await history.replace(routes.welcome);
   } finally {
     document.location.reload();
   }

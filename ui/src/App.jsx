@@ -1,10 +1,8 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import { useStoreState } from 'easy-peasy';
 import { Routes, Route } from 'react-router-dom';
 
 import Header from "./components/Header/Header";
-import { Error } from './components/general/Error/Error';
 import CreateBountyProposal
   from "./pages/CreateBountyProposal/CreateBountyProposal";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
@@ -13,8 +11,6 @@ import MarketingRequestForm
 import WelcomePage from "./pages/WelcomePage/WelcomePage";
 
 const App = ({ history }) => {
-  const isError = useStoreState((store) => store.error.isError);
-
   return (
     <>
       <Header />
@@ -24,7 +20,6 @@ const App = ({ history }) => {
         <Route path="create-bounty-proposal" element={<CreateBountyProposal />} />
         <Route path="error" element={<ErrorPage />} />
       </Routes>
-      {isError && <Error isError={isError} />}
     </>
   );
 };
