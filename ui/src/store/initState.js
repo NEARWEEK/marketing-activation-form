@@ -11,9 +11,10 @@ const initState = {
     wallet: null,
   },
   temporary: {},
+  marketingFromId: null,
 };
 
 export const persistInitState = persist(initState, {
   storage: 'localStorage',
-  allow: ['temporary'],
+  allow: ['temporary', 'marketingFromId'],
 });

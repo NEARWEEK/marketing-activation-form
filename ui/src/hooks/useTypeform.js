@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { getTypeFormId } from "../services/apiService";
+import { getFormId } from "../services/apiService";
 
 import useAccountSignature from "./useAccountSignature";
 
@@ -11,7 +11,7 @@ const useTypeform = () => {
   useEffect(() => {
     if (signature) {
       (async () => {
-        const formId = await getTypeFormId(signature);
+        const formId = await getFormId(signature);
         setTypeformId(formId ? formId : '');
       })();
     }

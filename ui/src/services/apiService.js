@@ -4,7 +4,7 @@ import { routes } from "../config/routes";
 
 const API_HOST = process.env.REACT_APP_BACKEND_HOST;
 
-const getTypeFormId = async (signature) => {
+const getFormId = async (signature) => {
   if (!signature) {
     return null;
   }
@@ -17,6 +17,28 @@ const getTypeFormId = async (signature) => {
   });
 
   return response?.data?.formId;
+};
+
+const sendingForm = async (formId, responseId, signature) => {
+  if (!signature) {
+    return null;
+  }
+
+  const response = await axios.post(
+    `${API_HOST}/api/typeform/sending-form`,
+    {
+      typeformFormId: formId,
+      typeformResponseId: responseId,
+    },
+    {
+      headers: {
+        'X-NEAR-ACCOUNT-ID': signature.accountId,
+        'X-NEAR-SIGNATURE': JSON.stringify(signature.signature),
+      },
+    },
+  );
+
+  return response?.data;
 };
 
 const setupResponseInterceptor = (history) => {
@@ -33,6 +55,7 @@ const setupResponseInterceptor = (history) => {
 }
 
 export {
-  getTypeFormId,
+  getFormId,
+  sendingForm,
   setupResponseInterceptor,
 };

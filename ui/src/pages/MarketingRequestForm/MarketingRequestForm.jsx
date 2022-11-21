@@ -1,11 +1,14 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { Widget } from '@typeform/embed-react'
+import { useStoreActions } from 'easy-peasy';
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 import Loader from "../../components/general/Loader/Loader";
 import { routes } from "../../config/routes";
+import useAccountSignature from "../../hooks/useAccountSignature";
 import useTypeform from "../../hooks/useTypeform";
+import { sendingForm } from "../../services/apiService";
 
 // eslint-disable-next-line import/extensions
 import { useStyles } from './MarketingRequestForm.styles';
@@ -17,6 +20,8 @@ const MarketingRequestForm = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const formId = useTypeform();
+  const signature = useAccountSignature();
+  const setMarketingFromId = useStoreActions((actions) => actions.setMarketingFromId);
 
   useEffect(() => {
     if (formId === '') {
@@ -29,17 +34,23 @@ const MarketingRequestForm = () => {
     height: '100%',
   }
 
-  const handleSubmitTypeform = (event) => {
-    console.log(event.response_id)
-    // eslint-disable-next-line no-warning-comments
-    // TODO: sending response_id to backend
-    navigate(createBountyProposal);
+  const handleSubmitTypeform = (event, id, sign) => {
+    (async () => {
+      try {
+        const response = await sendingForm(id, event.response_id, sign);
+        setMarketingFromId(response.id);
+        navigate(createBountyProposal);
+      } catch (error) {
+        console.log(error);
+        navigate(errorPage);
+      }
+    })();
   };
 
   return (
     <>
       {
-        formId ?
+        formId && signature ?
           <div className={classes.widget}>
             <Widget
               id={formId}
@@ -50,7 +61,7 @@ const MarketingRequestForm = () => {
               autoResize={true}
               keepSession={true}
               enableSandbox={demoMode}
-              onSubmit={(event) => handleSubmitTypeform(event)}
+              onSubmit={(event) => handleSubmitTypeform(event, formId, signature)}
             />
           </div>
           : <Loader />

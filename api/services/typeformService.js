@@ -117,4 +117,12 @@ module.exports = {
       reportError(error, 'Marketing form initialize error');
     }
   },
+
+  async getResponses(formId, responseId) {
+    const { data } = await typeformInstance.get(
+      `/forms/${formId}/responses`,
+      { params: { 'included_response_ids': String(responseId), completed: true } }
+    );
+    return data?.items ? data.items : [];
+  }
 };
