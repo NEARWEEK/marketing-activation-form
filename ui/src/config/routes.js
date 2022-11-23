@@ -4,10 +4,11 @@ export const routes = {
   welcome: '/',
   marketingRequestForm: '/marketing-request-form',
   createBountyProposal: '/create-bounty-proposal',
+  complete: '/complete',
   redirectFromWallet: '/redirect-from-wallet',
   errorPage: '/error',
 };
 
 export const getRoute = {
-  callbackUrl: (parameters) => `${window.location.origin}/redirect-from-wallet?${qs.stringify(parameters)}`,
+  callbackUrl: (parameters) => `${window.location.origin}${routes.redirectFromWallet}?${qs.stringify(parameters)}`,
 };

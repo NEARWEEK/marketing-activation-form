@@ -4,23 +4,28 @@ import { Box, Button } from "@mui/material";
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import { useNavigate } from 'react-router';
 
-import { routes } from "../../config/routes";
 import Logo from '../../images/logo.png';
+import {
+  getPageAccordingToState
+} from "../../store/helpers/getPageAccordingToState";
 
 // eslint-disable-next-line import/extensions
 import { useStyles } from './WelcomePage.styles';
 
-const { marketingRequestForm } = routes;
-
-const WelcomePage = () => {
+// eslint-disable-next-line react/prop-types
+const WelcomePage = ({ history }) => {
   const onConnectWallet = useStoreActions((actions) => actions.onConnectWallet);
-  const wallet = useStoreState((state) => state.entities.wallet);
+  const ownState = useStoreState((state) => state);
+  const wallet = ownState?.entities?.wallet;
   const navigate = useNavigate();
   const classes = useStyles();
 
   const handleWelcomeButton = () => {
     if (wallet?.isSignedIn()) {
-      navigate(marketingRequestForm);
+      (async () => {
+        const page = await getPageAccordingToState(history, ownState);
+        navigate(page);
+      })();
     } else {
       onConnectWallet();
     }

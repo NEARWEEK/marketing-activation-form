@@ -11,9 +11,11 @@ export const onRedirectFromWallet = async (actions, history) => {
     } else {
       await history.replace(routes.marketingRequestForm);
     }
+
   } catch (error) {
-    console.log(`Error: ${error}`);
+    console.log('onRedirectFromWallet:', error);
     await history.replace(routes.welcome);
+
   } finally {
     document.location.reload();
   }

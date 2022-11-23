@@ -1,7 +1,7 @@
 import makeStyles from '@mui/styles/makeStyles';
 
 const styles = (theme) => ({
-  errorBox: {
+  bountyBox: {
     alignItems: 'center',
     flex: 'auto',
     maxWidth: 800,
@@ -9,10 +9,6 @@ const styles = (theme) => ({
     marginBottom: 0,
     marginLeft: 'auto',
     marginRight: 'auto',
-    color: "#444"
-  },
-  errorIcon: {
-    textAlign: "center",
   },
   textBlock: {
     textAlign: "center",
@@ -21,14 +17,14 @@ const styles = (theme) => ({
     gap: theme.spacing(3),
     alignItems: 'center',
   },
-  errorTitle: {
+  thankYouScreensTitle: {
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
   },
-  errorDescription: {
+  thankYouScreensDescription: {
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
   },
 });
 
-export const useStyles = makeStyles(styles, { name: 'ErrorPage' });
+export const useStyles = makeStyles(styles, { name: 'CreateBountyProposal' });

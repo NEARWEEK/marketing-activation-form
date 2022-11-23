@@ -13,6 +13,7 @@ export const onInitApp = thunk(async (actions, payload, helpers) => {
   global.Buffer = Buffer;
   const { history, setInit } = payload;
   const { setNearApi } = actions;
+
   try {
     setNearApi(await getNearApi());
     const state = helpers.getStoreState();
@@ -20,13 +21,14 @@ export const onInitApp = thunk(async (actions, payload, helpers) => {
     if (isRedirectFromWallet(state, history)) {
       await onRedirectFromWallet(actions, history);
     } else {
-      await onLoadPage(state, history);
+      await onLoadPage(actions, state, history);
     }
 
     actions.clearTemporaryData();
     setInit(true);
+
   } catch (error) {
-    console.log(`Error onInit App: ${error}`);
+    console.log('onInitApp:', error);
     await history.replace(routes.errorPage);
   }
 });

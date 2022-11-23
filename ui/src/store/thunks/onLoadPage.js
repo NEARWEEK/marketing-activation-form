@@ -1,30 +1,16 @@
-import { matchPath } from 'react-router';
-
 import { routes } from '../../config/routes';
+import { getPageAccordingToState } from "../helpers/getPageAccordingToState";
+import { pathMatched } from "../helpers/pathMatched";
 
-const { welcome, marketingRequestForm } = routes;
-
-const rootHandler = ({ replace }) => {
-  console.log('rootHandler');
-  return replace(welcome);
-};
-
-const marketingRequestFormHandler = ({ replace, state }) => {
-  console.log('marketingRequestFormHandler');
+export const onLoadPage = async (actions, state, history) => {
   const { wallet } = state.entities;
-  if (!wallet.isSignedIn()) return replace(welcome);
-  return replace(marketingRequestForm);
-};
+  const locationPathName = history.location.pathname;
 
-const handlers = {
-  [welcome]: rootHandler,
-  [marketingRequestForm]: marketingRequestFormHandler,
-};
+  if (!wallet.isSignedIn() || pathMatched(routes.welcome, locationPathName)) {
+    await history.replace(routes.welcome);
 
-export const onLoadPage = async (state, history) => {
-  const mp = Object.keys(routes).find((route) =>
-    matchPath({ path: routes[route], exact: true }, history.location.pathname),
-  );
-
-  if (mp) await handlers[routes[mp]]({ replace: history.replace, state });
+  } else {
+    const page = await getPageAccordingToState(history, state);
+    await history.replace(page);
+  }
 };

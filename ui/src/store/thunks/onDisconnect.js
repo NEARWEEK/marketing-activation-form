@@ -8,8 +8,10 @@ export const onDisconnect = thunk(async (actions, history, helpers) => {
     const wallet = store.entities.wallet;
     wallet.signOut();
     history.replace(routes.welcome);
+
   } catch (error) {
     console.log(`Error: ${error}`);
+
   } finally {
     document.location.reload();
   }

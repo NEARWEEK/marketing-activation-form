@@ -3,6 +3,7 @@
 import { Routes, Route } from 'react-router-dom';
 
 import Header from "./components/Header/Header";
+import CompletePage from "./pages/CompletePage/CompletePage";
 import CreateBountyProposal
   from "./pages/CreateBountyProposal/CreateBountyProposal";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
@@ -18,6 +19,7 @@ const App = ({ history }) => {
         <Route index path="/" element={<WelcomePage history={history} />} />
         <Route path="marketing-request-form" element={<MarketingRequestForm />} />
         <Route path="create-bounty-proposal" element={<CreateBountyProposal />} />
+        <Route path="complete" element={<CompletePage />} />
         <Route path="error" element={<ErrorPage />} />
       </Routes>
     </>

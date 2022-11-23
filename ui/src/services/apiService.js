@@ -41,6 +41,21 @@ const sendingForm = async (formId, responseId, signature) => {
   return response?.data;
 };
 
+const getForm = async (id, signature) => {
+  if (!signature) {
+    return null;
+  }
+
+  const response = await axios.get(`${API_HOST}/api/typeform/${String(id)}`, {
+    headers: {
+      'X-NEAR-ACCOUNT-ID': signature.accountId,
+      'X-NEAR-SIGNATURE': JSON.stringify(signature.signature),
+    },
+  });
+
+  return response?.data?.marketingRequestForm;
+};
+
 const setupResponseInterceptor = (history) => {
   axios.interceptors.response.use(
     (response) => {
@@ -58,4 +73,5 @@ export {
   getFormId,
   sendingForm,
   setupResponseInterceptor,
+  getForm,
 };
