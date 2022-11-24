@@ -1,7 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable id-length */
-import { Box, Button } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { Box } from "@mui/material";
 import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useState } from "react";
 import { useNavigate } from 'react-router';
 
 import Logo from '../../images/logo.png';
@@ -18,10 +20,12 @@ const WelcomePage = ({ history }) => {
   const ownState = useStoreState((state) => state);
   const wallet = ownState?.entities?.wallet;
   const navigate = useNavigate();
+  const [isLoading, setLoading] = useState(false);
   const classes = useStyles();
 
   const handleWelcomeButton = () => {
     if (wallet?.isSignedIn()) {
+      setLoading(true);
       (async () => {
         const page = await getPageAccordingToState(history, ownState);
         navigate(page);
@@ -54,11 +58,13 @@ const WelcomePage = ({ history }) => {
                 </Box>
               </Box>
               <Box display="flex" sx={{ paddingRight: 2, paddingLeft: 2, mt: 4 }}>
-                <Button
+                <LoadingButton
                   sx={{
                     borderRadius: 3,
                     p: '12px 37px',
                   }}
+                  disabled={isLoading}
+                  loading={isLoading}
                   variant="contained"
                   onClick={handleWelcomeButton}
                   disableElevation
@@ -66,7 +72,7 @@ const WelcomePage = ({ history }) => {
                   <Box style={{ fontWeight: [700] }}>
                     {wallet?.isSignedIn() ? 'Apply Today' : 'Connect wallet'}
                   </Box>
-                </Button>
+                </LoadingButton>
               </Box>
             </Box>
           </Box>
