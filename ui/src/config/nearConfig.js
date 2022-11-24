@@ -18,7 +18,6 @@ const mainnet = {
   nodeUrl: "https://rpc.mainnet.near.org",
   walletUrl: "https://wallet.near.org",
   helperUrl: "https://helper.mainnet.near.org",
-  contractName: process.env.REACT_APP_CONTRACT_NAME,
   isTestnet: false,
 };
 
@@ -35,3 +34,8 @@ const getNearConfig = (network) => {
 };
 
 export const nearConfig = getNearConfig(process.env.REACT_APP_NETWORK);
+
+export const daoConfig = {
+  contractName: process.env.REACT_APP_CONTRACT_NAME,
+  proposalDescription: process.env.REACT_APP_DAO_PROPOSAL_DESCRIPTION,
+};

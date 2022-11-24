@@ -4,9 +4,15 @@ import { thunk } from 'easy-peasy';
 
 import { routes } from "../../config/routes";
 import { getNearApi } from "../helpers/getNearApi";
+import {
+  isRedirectAfterCreatingProposal
+} from "../helpers/isRedirectAfterCreatingProposal";
 import { isRedirectFromWallet } from '../helpers/isRedirectFromWallet';
 
 import { onLoadPage } from './onLoadPage';
+import {
+  onRedirectAfterCreatingProposal
+} from "./onRedirectAfterCreatingProposal";
 import { onRedirectFromWallet } from './onRedirectFromWallet';
 
 export const onInitApp = thunk(async (actions, payload, helpers) => {
@@ -19,7 +25,11 @@ export const onInitApp = thunk(async (actions, payload, helpers) => {
     const state = helpers.getStoreState();
 
     if (isRedirectFromWallet(state, history)) {
-      await onRedirectFromWallet(actions, history);
+      await onRedirectFromWallet(actions, state, history);
+
+    } else if (isRedirectAfterCreatingProposal(state, history)) {
+      await onRedirectAfterCreatingProposal(actions, state, history);
+
     } else {
       await onLoadPage(actions, state, history);
     }

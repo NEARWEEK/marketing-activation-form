@@ -1,6 +1,8 @@
 import { Buffer } from 'buffer';
 
-const networkId = process.env.REACT_APP_NETWORK;
+import { nearConfig } from '../config/nearConfig';
+
+const { networkId } = nearConfig;
 
 const signStringMessage = async (near, wallet, stringMessage) => {
   const signer = near?.connection.signer;

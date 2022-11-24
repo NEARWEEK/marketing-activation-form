@@ -25,6 +25,21 @@ const styles = (theme) => ({
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
   },
+  form: {
+    width: '50%',
+    maxWidth: 480,
+    display: 'flex',
+    flexDirection: 'column',
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+  },
+  inputGroup: {
+    marginBottom: '24px !important',
+    textAlign: 'left',
+    '& .MuiDivider-root::before': {
+      width: '0 !important',
+    },
+  },
 });
 
 export const useStyles = makeStyles(styles, { name: 'CreateBountyProposal' });

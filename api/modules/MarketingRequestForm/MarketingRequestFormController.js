@@ -5,6 +5,11 @@ const logger = require("../../utilities/logger");
 const { reportError } = require("../../services/errorReportingService");
 const MarketingRequestForm = require('./MarketingRequestFormModel');
 
+const isOtherNearAccount = (req, marketingRequestForm) => {
+  const nearAccountId = req.headers['x-near-account-id'];
+  return marketingRequestForm.nearAccountId !== nearAccountId;
+};
+
 module.exports = {
   async getFormId(req, res) {
     try {
@@ -87,10 +92,105 @@ module.exports = {
         return;
       }
 
+      if (isOtherNearAccount(req, marketingRequestForm)) {
+        const message = 'This entry belongs to another account';
+        reportError(null, message);
+        res.status(403).json({ message });
+        return;
+      }
+
       res.json({ marketingRequestForm });
 
     } catch (error) {
       reportError(error, 'Could not get marketing form');
+      res.status(500).json({
+        message: error.message,
+      });
+    }
+  },
+
+  async updateProposalId(req, res) {
+    try {
+      const { id, daoProposalId } = req.body;
+      logger.info(`Update proposal ID in the Form: ${id}`);
+      let marketingRequestForm = await MarketingRequestForm.findOne({ id });
+
+      if (!marketingRequestForm) {
+        const message = 'No such Marketing Request Form under this ID';
+        reportError(null, message);
+        res.status(404).json({ message });
+        return;
+      }
+
+      if (marketingRequestForm.daoProposalId) {
+        const message = 'An proposal ID is already set in this entry';
+        reportError(null, message);
+        res.status(400).json({ message });
+        return;
+      }
+
+      if (isOtherNearAccount(req, marketingRequestForm)) {
+        const message = 'This entry belongs to another account';
+        reportError(null, message);
+        res.status(403).json({ message });
+        return;
+      }
+
+      marketingRequestForm.daoProposalId = daoProposalId;
+      marketingRequestForm.daoProposalStatus = 'InProgress';
+      marketingRequestForm = await marketingRequestForm.save();
+
+      res.json({ marketingRequestForm });
+
+    } catch (error) {
+      reportError(error, 'Failed to update marketing form');
+      res.status(500).json({
+        message: error.message,
+      });
+    }
+  },
+
+  async updateIssueId(req, res) {
+    try {
+      const { id, trelloIssueId } = req.body;
+      logger.info(`Update issue ID in the Form: ${id}`);
+      let marketingRequestForm = await MarketingRequestForm.findOne({ id });
+
+      if (!marketingRequestForm) {
+        const message = 'No such Marketing Request Form under this ID';
+        reportError(null, message);
+        res.status(404).json({ message });
+        return;
+      }
+
+      if (!marketingRequestForm.daoProposalId) {
+        const message = 'This entry does not yet have an proposal ID';
+        reportError(null, message);
+        res.status(400).json({ message });
+        return;
+      }
+
+      if (marketingRequestForm.trelloIssueId) {
+        const message = 'An issue ID is already set in this entry';
+        reportError(null, message);
+        res.status(400).json({ message });
+        return;
+      }
+
+      if (isOtherNearAccount(req, marketingRequestForm)) {
+        const message = 'This entry belongs to another account';
+        reportError(null, message);
+        res.status(403).json({ message });
+        return;
+      }
+
+      marketingRequestForm.trelloIssueId = trelloIssueId;
+      marketingRequestForm = await marketingRequestForm.save();
+
+      res.json({ marketingRequestForm });
+
+    } catch (error) {
+      reportError(error, 'Failed to update marketing form');
       res.status(500).json({
         message: error.message,
       });

@@ -56,6 +56,28 @@ const getForm = async (id, signature) => {
   return response?.data?.marketingRequestForm;
 };
 
+const updateProposalId = async (id, proposalId, signature) => {
+  if (!signature) {
+    return null;
+  }
+
+  const response = await axios.put(
+    `${API_HOST}/api/typeform/update-proposal-id`,
+    {
+      id,
+      daoProposalId: proposalId,
+    },
+    {
+      headers: {
+        'X-NEAR-ACCOUNT-ID': signature.accountId,
+        'X-NEAR-SIGNATURE': JSON.stringify(signature.signature),
+      },
+    },
+  );
+
+  return response?.data?.marketingRequestForm;
+};
+
 const setupResponseInterceptor = (history) => {
   axios.interceptors.response.use(
     (response) => {
@@ -74,4 +96,5 @@ export {
   sendingForm,
   setupResponseInterceptor,
   getForm,
+  updateProposalId,
 };

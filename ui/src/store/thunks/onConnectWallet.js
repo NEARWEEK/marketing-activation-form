@@ -2,11 +2,11 @@ import { Buffer } from 'buffer';
 
 import { thunk } from 'easy-peasy';
 
-import { nearConfig } from '../../config/nearConfig';
+import { daoConfig } from '../../config/nearConfig';
 import { redirectPages } from '../../config/redirectPages';
 import { getRoute } from '../../config/routes';
 
-const { contractName } = nearConfig;
+const { contractName } = daoConfig;
 
 export const onConnectWallet = thunk(async (actions, _, helpers) => {
   global.Buffer = Buffer;
