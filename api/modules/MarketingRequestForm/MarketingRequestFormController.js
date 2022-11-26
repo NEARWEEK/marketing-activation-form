@@ -1,4 +1,4 @@
-const { answerWithContactsRef } = require('../../config/typeform');
+const { createTrelloIssue } = require("../../services/trelloService");
 const { getSettingValue } = require('../../services/settingsService');
 const { getResponses } = require('../../services/typeformService');
 const logger = require("../../utilities/logger");
@@ -37,21 +37,12 @@ module.exports = {
         return;
       }
 
-      const responses = await getResponses(typeformFormId, typeformResponseId);
-      let typeformResponseObject, clientContacts;
-      if (responses?.length > 0) {
-        typeformResponseObject = responses[0]?.answers;
-        clientContacts = Array.isArray(typeformResponseObject) ?
-          typeformResponseObject.find(
-            element => element?.field?.ref === answerWithContactsRef
-          )?.text :
-          undefined;
-      }
+      const { typeformAnswers, clientContacts } = await getResponses(typeformFormId, typeformResponseId);
 
       let form = await MarketingRequestForm.findOne({ nearAccountId, typeformFormId });
       if (form) {
         form.typeformResponseId = typeformResponseId;
-        form.typeformResponseObject = typeformResponseObject;
+        form.typeformAnswers = typeformAnswers;
         form.clientContacts = clientContacts;
         form.daoProposalId = undefined;
         form.daoProposalStatus = undefined;
@@ -63,7 +54,7 @@ module.exports = {
           nearAccountId,
           typeformFormId,
           typeformResponseId,
-          typeformResponseObject,
+          typeformAnswers,
           clientContacts,
         });
       }
@@ -113,6 +104,14 @@ module.exports = {
     try {
       const { id, daoProposalId } = req.body;
       logger.info(`Update proposal ID in the Form: ${id}`);
+
+      if (!id || !daoProposalId) {
+        const message = 'Invalid request data';
+        reportError(null, message);
+        res.status(400).json({ message });
+        return;
+      }
+
       let marketingRequestForm = await MarketingRequestForm.findOne({ id });
 
       if (!marketingRequestForm) {
@@ -138,53 +137,17 @@ module.exports = {
 
       marketingRequestForm.daoProposalId = daoProposalId;
       marketingRequestForm.daoProposalStatus = 'InProgress';
-      marketingRequestForm = await marketingRequestForm.save();
+      const trelloResponse = await createTrelloIssue(marketingRequestForm);
 
-      res.json({ marketingRequestForm });
-
-    } catch (error) {
-      reportError(error, 'Failed to update marketing form');
-      res.status(500).json({
-        message: error.message,
-      });
-    }
-  },
-
-  async updateIssueId(req, res) {
-    try {
-      const { id, trelloIssueId } = req.body;
-      logger.info(`Update issue ID in the Form: ${id}`);
-      let marketingRequestForm = await MarketingRequestForm.findOne({ id });
-
-      if (!marketingRequestForm) {
-        const message = 'No such Marketing Request Form under this ID';
+      if (!trelloResponse) {
+        const message = 'Error creating a card in Trello';
         reportError(null, message);
-        res.status(404).json({ message });
+        res.status(500).json({ message });
         return;
       }
 
-      if (!marketingRequestForm.daoProposalId) {
-        const message = 'This entry does not yet have an proposal ID';
-        reportError(null, message);
-        res.status(400).json({ message });
-        return;
-      }
-
-      if (marketingRequestForm.trelloIssueId) {
-        const message = 'An issue ID is already set in this entry';
-        reportError(null, message);
-        res.status(400).json({ message });
-        return;
-      }
-
-      if (isOtherNearAccount(req, marketingRequestForm)) {
-        const message = 'This entry belongs to another account';
-        reportError(null, message);
-        res.status(403).json({ message });
-        return;
-      }
-
-      marketingRequestForm.trelloIssueId = trelloIssueId;
+      marketingRequestForm.trelloIssueId = trelloResponse.id;
+      marketingRequestForm.trelloIssueStatus = 'New';
       marketingRequestForm = await marketingRequestForm.save();
 
       res.json({ marketingRequestForm });

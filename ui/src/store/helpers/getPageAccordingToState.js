@@ -23,7 +23,7 @@ export const getPageAccordingToState = async (history, state) => {
       return routes.marketingRequestForm;
     }
 
-    if (!form.typeformResponseObject || !form.clientContacts) {
+    if (!form.typeformAnswers || !form.clientContacts) {
       return routes.marketingRequestForm;
     }
 

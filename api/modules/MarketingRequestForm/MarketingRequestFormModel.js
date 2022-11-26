@@ -8,7 +8,7 @@ const MarketingRequestFormSchema = new Schema(
     nearAccountId: String,
     typeformFormId: String,
     typeformResponseId: String,
-    typeformResponseObject: Object,
+    typeformAnswers: Object,
     clientContacts: String,
     daoProposalId: String,
     daoProposalStatus: String,

@@ -1,5 +1,6 @@
 const axios = require('axios');
 const fs = require("fs");
+const { answerWithContactsRef } = require("../config/typeform");
 const config = require('../config/typeform');
 const logger = require('../utilities/logger');
 const { reportError } = require('../services/errorReportingService');
@@ -15,6 +16,11 @@ const typeformInstance = axios.create({
 const getEntities = async (entityName, params) => {
   const { data } = await typeformInstance.get(`/${entityName}`, { params });
   return data?.items ? data.items : [];
+};
+
+const getFormFields = async (formId) => {
+  const { data } = await typeformInstance.get(`/forms/${formId}`);
+  return data?.fields?.length > 0 ? data.fields : null;
 };
 
 const createForm = async (params) => {
@@ -119,10 +125,38 @@ module.exports = {
   },
 
   async getResponses(formId, responseId) {
+    const questions = await getFormFields(formId);
+    const emptyResult = { typeformAnswers: null, clientContacts: null };
+
+    if (!questions) {
+      return emptyResult;
+    }
+
     const { data } = await typeformInstance.get(
       `/forms/${formId}/responses`,
       { params: { 'included_response_ids': String(responseId), completed: true } }
     );
-    return data?.items ? data.items : [];
+
+    let answers, clientContacts;
+    if (data?.items?.length > 0) {
+      answers = data?.items[0]?.answers;
+      clientContacts = Array.isArray(answers) ?
+        answers.find(
+          element => element?.field?.ref === answerWithContactsRef
+        )?.text :
+        null;
+    }
+
+    if (!(answers?.length > 0)) {
+      return emptyResult;
+    }
+
+    return {
+      typeformAnswers: {
+        questions,
+        answers,
+      },
+      clientContacts,
+    }
   }
 };

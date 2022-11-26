@@ -24,11 +24,15 @@ export const onRedirectAfterCreatingProposal = async (actions, state, history) =
         window.atob(txStatus?.status?.SuccessValue) :
         null;
 
-      const response = await updateProposalId(marketingFromId, proposalId, signature);
-
       let page;
-      if (response) {
-        page = await getPageAccordingToState(history, state);
+      if (proposalId) {
+        const response = await updateProposalId(marketingFromId, proposalId, signature);
+
+        if (response) {
+          page = await getPageAccordingToState(history, state);
+        } else {
+          page = routes.errorPage;
+        }
       } else {
         page = routes.errorPage;
       }

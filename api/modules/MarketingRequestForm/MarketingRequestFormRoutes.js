@@ -11,6 +11,4 @@ router.get('/:id', MarketingRequestFormController.show);
 
 router.put('/update-proposal-id', MarketingRequestFormController.updateProposalId);
 
-router.put('/update-issue-id', MarketingRequestFormController.updateIssueId);
-
 module.exports = router;

@@ -37,8 +37,7 @@ const MarketingRequestForm = () => {
   const handleSubmitTypeform = (event, id, sign) => {
     (async () => {
       try {
-        console.log(event.response_id)
-        const response = await sendingForm(id, 1, sign);
+        const response = await sendingForm(id, event.response_id, sign);
         if (response) {
           setMarketingFromId(response.id);
           navigate(createBountyProposal);
