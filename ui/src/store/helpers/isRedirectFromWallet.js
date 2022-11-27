@@ -9,7 +9,7 @@ export const isRedirectFromWallet = (state, history) => {
 
   return (
     typeof redirectAction === 'string' &&
-    pathMatched(routes.redirectFromWallet, history.location.pathname) &&
+    pathMatched(routes.welcome, history.location.pathname) &&
     state.temporary.redirectAction === redirectAction
   );
 };

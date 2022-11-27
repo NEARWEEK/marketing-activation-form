@@ -37,5 +37,5 @@ export const nearConfig = getNearConfig(process.env.REACT_APP_NETWORK);
 
 export const daoConfig = {
   contractName: process.env.REACT_APP_CONTRACT_NAME,
-  proposalDescription: process.env.REACT_APP_DAO_PROPOSAL_DESCRIPTION,
+  proposalDescriptionPrefix: process.env.REACT_APP_PROPOSAL_DESCRIPTION_PREFIX,
 };

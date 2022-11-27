@@ -1,39 +1,48 @@
-import { providers } from "near-api-js";
 import qs from 'query-string';
 
-import { nearConfig } from '../../config/nearConfig';
 import { routes } from '../../config/routes';
 import { updateProposalId } from "../../services/apiService";
+import { getProposalId } from "../../services/daoContractService";
 import { signStringMessage } from "../../services/signatureService";
 import { getPageAccordingToState } from "../helpers/getPageAccordingToState";
 
-const { nodeUrl } = nearConfig;
+const waitMilliseconds = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(ms);
+    }, ms );
+  });
+};
 
-export const onRedirectAfterCreatingProposal = async (actions, state, history) => {
+export const onRedirectAfterCreatingProposal = async (actions, state, history, helpers) => {
   try {
     const { near, wallet } = state.entities;
     const accountId = wallet?.getAccountId();
     const { transactionHashes } = qs.parse(history.location.search);
+    const transactionId = transactionHashes ? String(transactionHashes) : undefined;
     const marketingFromId = state.marketingFromId;
     const signature = await signStringMessage(near, wallet, accountId);
 
-    if (transactionHashes && marketingFromId) {
-      const provider = new providers.JsonRpcProvider(nodeUrl);
-      const txStatus = await provider.txStatus(String(transactionHashes), accountId);
-      const proposalId = txStatus?.status?.SuccessValue ?
-        window.atob(txStatus?.status?.SuccessValue) :
-        null;
-
+    if (transactionId && marketingFromId) {
       let page;
-      if (proposalId) {
-        const response = await updateProposalId(marketingFromId, proposalId, signature);
+      if (transactionId === helpers.getStoreState().transactionHash) {
+        await waitMilliseconds(2_000);
+        page = await getPageAccordingToState(history, state);
 
-        if (response) {
-          page = await getPageAccordingToState(history, state);
-        } else {
-          page = routes.errorPage;
-        }
       } else {
+        actions.setTransactionHash(transactionId);
+        const proposalId = await getProposalId(transactionId, accountId);
+
+        if (proposalId) {
+          const response = await updateProposalId(marketingFromId, proposalId, signature);
+
+          if (response) {
+            page = await getPageAccordingToState(history, state);
+          }
+        }
+      }
+
+      if (!page) {
         page = routes.errorPage;
       }
 
@@ -46,8 +55,5 @@ export const onRedirectAfterCreatingProposal = async (actions, state, history) =
   } catch (error) {
     console.log('onRedirectAfterCreatingProposal:', error);
     await history.replace(routes.errorPage);
-
-  } finally {
-    document.location.reload();
   }
 };

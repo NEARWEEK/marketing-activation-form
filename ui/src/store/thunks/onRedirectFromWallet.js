@@ -3,10 +3,9 @@ import qs from 'query-string';
 import { routes } from '../../config/routes';
 import { getPageAccordingToState } from "../helpers/getPageAccordingToState";
 
-export const onRedirectFromWallet = async (actions, state, history) => {
+export const onRedirectFromWallet = async (state, history) => {
   try {
-    const query = qs.parse(history.location.search);
-    const { errorCode } = query;
+    const { errorCode } = qs.parse(history.location.search);
 
     if (errorCode) {
       await history.replace(routes.welcome);

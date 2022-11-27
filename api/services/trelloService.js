@@ -36,7 +36,7 @@ const buildIssueDescription = (form) => {
           answerText = answer.text;
           break;
         case "boolean":
-          answerText = String(answer.boolean);
+          answerText = Boolean(answer.boolean) ? 'Yes' : 'No';
           break;
         case "email":
           answerText = answer.email;
@@ -80,6 +80,7 @@ module.exports = {
         name,
         desc: description,
         pos: 'bottom',
+        start: new Date().toISOString(),
       };
 
       const { data } = await trelloInstance.post(

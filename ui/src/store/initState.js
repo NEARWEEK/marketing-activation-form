@@ -8,9 +8,10 @@ const initState = {
   },
   temporary: {},
   marketingFromId: null,
+  transactionHash: null,
 };
 
 export const persistInitState = persist(initState, {
   storage: 'localStorage',
-  allow: ['temporary', 'marketingFromId'],
+  allow: ['temporary', 'marketingFromId', 'transactionHash'],
 });

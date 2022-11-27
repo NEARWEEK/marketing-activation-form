@@ -1,10 +1,12 @@
 import { Decimal } from "decimal.js";
+import { providers } from "near-api-js";
 
-import { daoConfig } from '../config/nearConfig';
+import { daoConfig, nearConfig } from '../config/nearConfig';
 import { redirectPages } from "../config/redirectPages";
 import { routes } from "../config/routes";
 
-const { proposalDescription } = daoConfig;
+const { proposalDescriptionPrefix } = daoConfig;
+const { nodeUrl } = nearConfig;
 
 const createBountyProposal = async (
   contract,
@@ -25,6 +27,7 @@ const createBountyProposal = async (
     const redirectAction = redirectPages.createBountyProposal;
     setTemporaryData({ redirectAction });
     const policy = await contract.get_policy();
+    const fullDescription = `${proposalDescriptionPrefix}: ${description}`;
 
     contract.add_proposal(
       {
@@ -32,11 +35,11 @@ const createBountyProposal = async (
         meta: redirectAction,
         args: {
           proposal: {
-            description: proposalDescription,
+            description: fullDescription,
             kind: {
               AddBounty: {
                 bounty: {
-                  description,
+                  description: fullDescription,
                   token: "",
                   amount: new Decimal(String(amount))
                     .mul(new Decimal(10).pow(24))
@@ -60,6 +63,15 @@ const createBountyProposal = async (
   }
 };
 
+const getProposalId = async (transactionId, accountId) => {
+  const provider = new providers.JsonRpcProvider(nodeUrl);
+  const txStatus = await provider.txStatus(transactionId, accountId);
+  return txStatus?.status?.SuccessValue ?
+    window.atob(txStatus?.status?.SuccessValue) :
+    null;
+};
+
 export {
   createBountyProposal,
+  getProposalId,
 };

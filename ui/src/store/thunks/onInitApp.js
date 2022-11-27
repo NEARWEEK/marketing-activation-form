@@ -25,10 +25,10 @@ export const onInitApp = thunk(async (actions, payload, helpers) => {
     const state = helpers.getStoreState();
 
     if (isRedirectFromWallet(state, history)) {
-      await onRedirectFromWallet(actions, state, history);
+      await onRedirectFromWallet(state, history);
 
     } else if (isRedirectAfterCreatingProposal(state, history)) {
-      await onRedirectAfterCreatingProposal(actions, state, history);
+      await onRedirectAfterCreatingProposal(actions, state, history, helpers);
 
     } else {
       await onLoadPage(actions, state, history);
