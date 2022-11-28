@@ -6,15 +6,6 @@ const verifyNearSignatureHeader = async (req, res, next) => {
     throw new Error('verifyNearSignatureHeader middleware should be used after the near middleware');
   }
 
-  // TODO: Filtering cases when signature verification is not required
-  // if (req.originalUrl.startsWith(`/admin/${ADMIN_TOKEN}/accounts/`)) {
-  //   // get account id from url
-  //   const accountId = req.originalUrl.split('/')[4];
-  //   req.near.accountId = accountId;
-  //   next();
-  //   return;
-  // }
-
   if (!req.headers['x-near-account-id'] || !req.headers['x-near-signature']) {
     res.status(401).send('Unauthorized');
     return;
@@ -28,8 +19,8 @@ const verifyNearSignatureHeader = async (req, res, next) => {
   const signature = new Uint8Array(signatureArray);
   const message = new Uint8Array(sha256.array(accountId));
 
-  const { near } = req.near;
-  const account = await near.account(accountId);
+  const { connection } = req.near;
+  const account = new nearApi.Account(connection, accountId);
   const accessKeys = await account.getAccessKeys();
 
   for (const accessKey of accessKeys) {

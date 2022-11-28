@@ -1,3 +1,4 @@
+const { daoConfig } = require('../../config/near');
 const { createTrelloIssue } = require("../../services/trelloService");
 const { getSettingValue } = require('../../services/settingsService');
 const { getResponses } = require('../../services/typeformService');
@@ -6,7 +7,7 @@ const { reportError } = require("../../services/errorReportingService");
 const MarketingRequestForm = require('./MarketingRequestFormModel');
 
 const isOtherNearAccount = (req, marketingRequestForm) => {
-  const nearAccountId = req.headers['x-near-account-id'];
+  const nearAccountId = req.near.accountId;
   return marketingRequestForm.nearAccountId !== nearAccountId;
 };
 
@@ -27,7 +28,7 @@ module.exports = {
   async sendingForm(req, res) {
     try {
       const { typeformResponseId, typeformFormId } = req.body;
-      const nearAccountId = req.headers['x-near-account-id'];
+      const nearAccountId = req.near.accountId;
       logger.info(`Submitting Marketing Request Form: ${typeformResponseId}`);
 
       if (!typeformResponseId || !typeformFormId) {
@@ -44,6 +45,7 @@ module.exports = {
         form.typeformResponseId = typeformResponseId;
         form.typeformAnswers = typeformAnswers;
         form.clientContacts = clientContacts;
+        form.daoContractId = undefined;
         form.daoProposalId = undefined;
         form.daoProposalStatus = undefined;
         form.daoBountyId = undefined;
@@ -135,6 +137,7 @@ module.exports = {
         return;
       }
 
+      marketingRequestForm.daoContractId = daoConfig.contractName;
       marketingRequestForm.daoProposalId = daoProposalId;
       marketingRequestForm.daoProposalStatus = 'InProgress';
       const trelloResponse = await createTrelloIssue(marketingRequestForm);

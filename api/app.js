@@ -12,6 +12,7 @@ const verifyNearSignatureHeader = require('./middlewares/verifyNearSignatureHead
 const logger = require('./utilities/logger');
 const config = require('./config/app');
 const near = require('./middlewares/near');
+const { setupSchedules } = require("./services/cronScheduleService");
 
 // Routes
 const marketingRequestFormRoutes = require('./modules/MarketingRequestForm/MarketingRequestFormRoutes');
@@ -34,7 +35,8 @@ const setup = async () => {
   });
 
   // Set up NEAR
-  const nearApi = await setUpNear();
+  const nearApi = setUpNear();
+  app.set('near', nearApi);
 
   // Set up Typeform
   await setupTypeform();
@@ -46,6 +48,9 @@ const setup = async () => {
   app.use(near(nearApi));
   app.use(cors(corsOptions));
   app.use(verifyNearSignatureHeader);
+
+  // Set up Cron Scheduler
+  await setupSchedules(app);
 
   // Set up routes
   app.use('/api/typeform', marketingRequestFormRoutes);

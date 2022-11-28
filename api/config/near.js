@@ -1,23 +1,17 @@
-import { keyStores } from "near-api-js";
-
-const keyStore = new keyStores.BrowserLocalStorageKeyStore();
-
 const testnet = {
-  keyStore,
   networkId: "testnet",
   nodeUrl: "https://rpc.testnet.near.org",
   walletUrl: "https://wallet.testnet.near.org",
   helperUrl: "https://helper.testnet.near.org",
-  isTestnet: true,
+  explorerUrl: "https://explorer.testnet.near.org",
 };
 
 const mainnet = {
-  keyStore,
   networkId: "mainnet",
   nodeUrl: "https://rpc.mainnet.near.org",
   walletUrl: "https://wallet.near.org",
   helperUrl: "https://helper.mainnet.near.org",
-  isTestnet: false,
+  explorerUrl: "https://explorer.near.org",
 };
 
 const configs = {
@@ -25,16 +19,19 @@ const configs = {
   mainnet,
 };
 
-const getNearConfig = (network) => {
+const getNearConfig = () => {
+  const network = process.env.NEAR_NETWORK_ENV || 'testnet';
   const config = configs[network];
   return {
     ...config,
   };
 };
 
-export const nearConfig = getNearConfig(process.env.REACT_APP_NETWORK);
+const daoConfig = {
+  contractName: process.env.NEAR_DAO_CONTRACT_ID,
+};
 
-export const daoConfig = {
-  contractName: process.env.REACT_APP_CONTRACT_NAME,
-  proposalDescriptionPrefix: process.env.REACT_APP_PROPOSAL_DESCRIPTION_PREFIX,
+module.exports = {
+  getNearConfig,
+  daoConfig,
 };

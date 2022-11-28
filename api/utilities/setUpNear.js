@@ -1,27 +1,21 @@
+const { InMemorySigner, keyStores } = require("near-api-js");
 const nearApi = require('near-api-js');
-const getNearConfig = require('./getNearConfig');
-const logger = require('./logger');
+const { getNearConfig } = require('../config/near');
 
-// TODO: Throw away unnecessary objects
-const setUpNear = async () => {
-  const network = process.env.NEAR_NETWORK_ENV;
-  logger.info(`[Near] Setting up near api js - network ${network}`);
+const setUpNear = () => {
+  const config = getNearConfig();
+  const connection = nearApi.Connection.fromConfig(
+    {
+      ...config,
+      provider: new nearApi.providers.JsonRpcProvider(
+        {url: config.nodeUrl}
+      ),
+      signer: new InMemorySigner(new keyStores.InMemoryKeyStore()),
+    }
+  );
+  const account = new nearApi.Account(connection, '');
 
-  const keyPair = nearApi.utils.key_pair.KeyPairEd25519.fromRandom();
-  const keyStore = new nearApi.keyStores.InMemoryKeyStore();
-
-  const nearConfig = getNearConfig(keyStore, network);
-  const near = await nearApi.connect(nearConfig);
-
-  const account = await near.account('testnet');
-
-  const setup = {
-    near,
-    keyPair,
-    account,
-  };
-
-  return setup;
+  return { connection, account };
 };
 
 module.exports = setUpNear;

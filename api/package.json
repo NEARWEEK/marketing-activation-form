@@ -19,6 +19,7 @@
     "mongoose-sequence": "^5.3.1",
     "morgan": "~1.9.1",
     "near-api-js": "^0.44.2",
+    "node-cron": "^3.0.2",
     "winston": "^3.7.2"
   },
   "devDependencies": {
