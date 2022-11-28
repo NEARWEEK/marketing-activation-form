@@ -21,7 +21,7 @@ const MarketingRequestFormSchema = new Schema(
 );
 
 MarketingRequestFormSchema.index({ nearAccountId: 1, typeformFormId: 1 }, { unique: true });
-MarketingRequestFormSchema.index({ daoContractId: 1, daoProposalId: 1 }, { unique: true });
+MarketingRequestFormSchema.index({ daoContractId: 1, daoProposalId: 1 }, { unique: false });
 MarketingRequestFormSchema.index({ daoProposalStatus: 1 }, { unique: false });
 MarketingRequestFormSchema.plugin(AutoIncrement, { inc_field: 'id' });
 
