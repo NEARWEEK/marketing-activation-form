@@ -21,7 +21,7 @@ const updateTrelloIssuesStatus = async (app) => {
         'get_proposal',
         { id: Number(form.daoProposalId) }
       );
-      console.log(proposal);
+      // console.log(proposal);
       // TODO
     }
   } catch (error) {

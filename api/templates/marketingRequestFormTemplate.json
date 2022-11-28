@@ -39,7 +39,7 @@
       "validations": {
         "required": false
       },
-      "type": "long_text"
+      "type": "short_text"
     },
     {
       "title": "What is the best way to contact you?\nEmail? Telegram? Twitter?",
@@ -48,7 +48,7 @@
         "description": "email@address.com or @username below"
       },
       "validations": {
-        "required": false
+        "required": true
       },
       "type": "long_text"
     },
@@ -61,7 +61,7 @@
       "validations": {
         "required": false
       },
-      "type": "long_text"
+      "type": "short_text"
     },
     {
       "title": "What category does your project belong to?",
@@ -204,6 +204,15 @@
         "required": false
       },
       "type": "multiple_choice"
+    },
+    {
+      "title": "Upload any relevant materials like marketing decks, logo's and brand books, press releases, explainers, etc.",
+      "ref": "8b5b5ea5-757e-4933-b7ee-b09882acd00a",
+      "properties": {},
+      "validations": {
+        "required": false
+      },
+      "type": "file_upload"
     },
     {
       "title": "Please provide your feedback on the form, did you miss anything?",
