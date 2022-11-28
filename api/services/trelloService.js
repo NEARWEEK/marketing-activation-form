@@ -81,10 +81,11 @@ module.exports = {
         desc: description,
         pos: 'bottom',
         start: new Date().toISOString(),
+        idList: config.listId,
       };
 
       const { data } = await trelloInstance.post(
-        `/cards?idList=${config.listId}&key=${config.apiKey}&token=${config.apiToken}`,
+        `/cards?key=${config.apiKey}&token=${config.apiToken}`,
         params,
         {
           'Content-Type': 'application/json',
@@ -106,6 +107,32 @@ module.exports = {
   },
 
   async updateTrelloIssue(id, approvalResult) {
-    // TODO
+    try {
+      const params = {
+        idList: approvalResult ?
+          config.listOfApprovedIssuesId :
+          config.listOfRejectedIssuesId,
+      };
+
+      const { data } = await trelloInstance.put(
+        `/cards/${id}?key=${config.apiKey}&token=${config.apiToken}`,
+        params,
+        {
+          'Content-Type': 'application/json',
+        }
+      );
+
+      if (!data?.id) {
+        reportError(data, 'Unsuccessful response from Trello');
+        return null;
+      }
+
+      logger.info(`Trello Card '${data.id}' status changed`);
+      return data;
+
+    } catch (error) {
+      reportError(error, 'Error updating card status');
+      return null;
+    }
   },
 };

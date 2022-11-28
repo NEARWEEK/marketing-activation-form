@@ -4,6 +4,7 @@ const config = require('../config/cron');
 const { daoConfig } = require('../config/near');
 const MarketingRequestForm = require('../modules/MarketingRequestForm/MarketingRequestFormModel');
 const { reportError } = require('./errorReportingService');
+const { updateTrelloIssue } = require("./trelloService");
 
 const updateTrelloIssuesStatus = async (app) => {
   try {
@@ -16,13 +17,37 @@ const updateTrelloIssuesStatus = async (app) => {
     });
 
     for (const form of forms) {
-      const proposal = await account.viewFunction(
-        daoContractId,
-        'get_proposal',
-        { id: Number(form.daoProposalId) }
-      );
-      // console.log(proposal);
-      // TODO
+      let proposal, status;
+
+      try {
+        proposal = await account.viewFunction(
+          daoContractId,
+          'get_proposal',
+          { id: Number(form.daoProposalId) }
+        );
+      } catch (error) {
+        reportError(error, 'No proposal found');
+        if (error.message.includes('ERR_NO_PROPOSAL')) {
+          status = 'Removed';
+        }
+      }
+
+      status = status || proposal?.status
+
+      if (['Approved', 'Rejected', 'Removed'].includes(status)) {
+        await MarketingRequestForm.findOneAndUpdate(
+          { _id: form._id },
+          { daoProposalStatus: status }
+        );
+
+        if (form.trelloIssueId) {
+          await updateTrelloIssue(form.trelloIssueId, status === 'Approved');
+          await MarketingRequestForm.findOneAndUpdate(
+            { _id: form._id },
+            { trelloIssueStatus: status === 'Approved' ? 'Approved' : 'Rejected' }
+          );
+        }
+      }
     }
   } catch (error) {
     reportError(error, 'Error updating issue statuses');
